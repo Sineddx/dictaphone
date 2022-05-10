@@ -1,4 +1,4 @@
-import { Appbar } from "react-native-paper";
+import {Appbar} from "react-native-paper";
 import i18n from "i18n-js";
 import {pl, en, es} from '../../languages'
 import * as Localization from 'expo-localization';

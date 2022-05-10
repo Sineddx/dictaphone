@@ -1,21 +1,17 @@
-import { Text, View, Alert, StyleSheet} from "react-native";
-import * as Localization from 'expo-localization';
-import i18n from 'i18n-js'
-import {pl, en, es} from '../../languages'
-import {Button} from 'react-native-paper'
-import {deleteAlert} from './helpers/helpers'
+import { Text, View, Alert, StyleSheet } from "react-native";
+import * as Localization from "expo-localization";
+import i18n from "i18n-js";
+import { pl, en, es } from "../../languages";
+import { Button } from "react-native-paper";
+import { deleteAlert } from "./helpers/helpers";
 import * as FileSystem from "expo-file-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {useState} from 'react'
+import { useState } from "react";
 import { Audio } from "expo-av";
 
-
-
 i18n.fallbacks = true;
-i18n.translations = {pl, en, es}
+i18n.translations = { pl, en, es };
 i18n.locale = Localization.locale;
-
-
 
 function RecordingLines(props) {
   const [sound, setSound] = useState();
@@ -24,6 +20,7 @@ function RecordingLines(props) {
     try {
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: false,
+        playsInSilentModeIOS: true,
       });
       const { sound } = await Audio.Sound.createAsync({
         uri: uri,
@@ -48,42 +45,48 @@ function RecordingLines(props) {
     }
   }
 
-
-  
-  return   props.recordings.map((recordingLine, index) => {
+  return props.recordings.map((recordingLine, index) => {
     return (
       <View style={styles.row} key={index}>
         <Text style={styles.fill}>{recordingLine.date}</Text>
         <Button
+          style={styles.btn}
           mode="outlined"
-          icon={require('../../assets/play.png')}
+          icon={require("../../assets/play.png")}
           onPress={() => playRecord(recordingLine.uri)}
         >
-          {i18n.t('playButton')}
+          {i18n.t("playButton")}
         </Button>
         <Button
-        mode="outlined"
-        icon={require("../../assets/recycle-bin.png")}
-        onPress={() => deleteAlert(recordingLine.uri, deleteRecord)}>
-        </Button>
+          style={styles.btn2}
+          mode="outlined"
+          icon={require("../../assets/recycle-bin.png")}
+          onPress={() => deleteAlert(recordingLine.uri, deleteRecord)}
+        ></Button>
       </View>
     );
-    
-  })
+  });
 }
 
 export default RecordingLines;
 
 const styles = StyleSheet.create({
   row: {
-    flexDirection: 'row',
-    alignItems:'center',
-    justifyContent: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   fill: {
     flex: 1,
     margin: 16,
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: "bold",
   },
-})
+  btn: {
+    width: 140,
+  },
+  btn2: {
+    height: 36,
+    width: 10,
+  },
+});
